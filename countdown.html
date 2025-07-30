@@ -21,15 +21,18 @@
     }
 
     .widget {
-      background-color: #f39c12;
-      padding: 30px 25px;
-      border-radius: 20px;
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      width: 90%;
-      max-width: 500px;
-      box-sizing: border-box;
-    }
+  background: linear-gradient(135deg, #f39c12, #e74c3c, #9b59b6, #3498db, #2ecc71);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  padding: 30px 25px;
+  border-radius: 20px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
 
     .title {
       font-weight: 600;
@@ -74,7 +77,11 @@
   margin-top: 10px;
   font-weight: 600;
 }
-    
+  @keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}  
   </style>
 </head>
 <body>
