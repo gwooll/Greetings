@@ -12,8 +12,8 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f39c12, #e74c3c); /* Colorful gradient background */
-      color: #ffffff; /* White text */
+      background-color: #ffffff; /* White background */
+      color: #37352f;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -23,7 +23,7 @@
     }
 
     .widget {
-      background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
+      background-color: #f39c12; /* Colorful box */
       padding: 30px 25px;
       border-radius: 20px;
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
@@ -34,11 +34,11 @@
       overflow: hidden;
     }
 
-    .date {
-      font-weight: 500;
-      font-size: 1.2rem;
+    .message {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #ffffff;
       margin-bottom: 20px;
-      color: #555555;
       letter-spacing: 0.05em;
     }
 
@@ -46,7 +46,7 @@
       margin-top: 20px;
       font-size: 2rem;
       font-weight: 700;
-      color: #f39c12;
+      color: #ecf0f1;
     }
 
     .clock {
@@ -87,100 +87,34 @@
       color: #34495e;
     }
 
-    /* Decorations */
-    .decorations {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: -1;
-    }
-
-    .decorations::after {
-      content: "🎉"; 
-      font-size: 50px;
-      animation: float 4s ease-in-out infinite;
-    }
-
-    /* Floating animation for decorations */
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-15px);
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
-
   </style>
 </head>
 <body>
 
-<!-- Decoration for festive vibes -->
-<div class="decorations"></div>
-
 <div class="container">
   <div class="widget">
 
-    <!-- Date Section -->
-    <div class="date" id="date">Loading date...</div>
+    <!-- Countdown Message -->
+    <div class="message" id="message">The countdown is on! The End of Busy Season Party is in...</div>
 
-    <!-- Countdown Clock -->
+    <!-- Countdown Timer -->
     <div class="countdown" id="countdown">Counting down...</div>
 
+    <!-- Time Display -->
     <div class="clock">
-      <span class="time" id="hour">--</span>
+      <span class="time" id="days">--</span> days
       <span class="colon">:</span>
-      <span class="time" id="min">--</span>     
-      <span class="colon"></span>
-      <span class="time am-pm" id="ampm">AM</span>
+      <span class="time" id="hours">--</span> hours
+      <span class="colon">:</span>
+      <span class="time" id="minutes">--</span> minutes
+      <span class="colon">:</span>
+      <span class="time" id="seconds">--</span> seconds
     </div>
 
   </div>
 </div>
 
 <script>
-// Function to display today's date
-function displayDate(today) {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  const dayName = days[today.getDay()];
-  const monthName = monthNames[today.getMonth()];
-  const date = today.getDate();
-  const year = today.getFullYear();
-
-  document.getElementById('date').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
-}
-
-// Function to display the current clock time
-function displayClock(today) {
-  const hour24 = today.getHours();
-  const hour12 = twelveHour(hour24);
-  const minutes = padZeros(today.getMinutes());
-  
-  const ampm = hour24 >= 12 ? 'PM' : 'AM';
-
-  document.getElementById('hour').textContent = hour12;
-  document.getElementById('min').textContent = minutes;
-  
-  document.getElementById('ampm').textContent = ampm;
-}
-
-function twelveHour(hour) {
-  if (hour === 0) return 12;
-  else if (hour > 12) return hour - 12;
-  else return hour;
-}
-
-function padZeros(num) {
-  return num < 10 ? '0' + num : num;
-}
-
 // Countdown Function
 function countdownToNovember() {
   const now = new Date();
@@ -193,35 +127,30 @@ function countdownToNovember() {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  // Display countdown
-  const countdownEl = document.getElementById('countdown');
-  countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  // Update the countdown text
+  document.getElementById('days').textContent = days;
+  document.getElementById('hours').textContent = hours;
+  document.getElementById('minutes').textContent = minutes;
+  document.getElementById('seconds').textContent = seconds;
 
   // Add comments based on remaining time
+  const countdownEl = document.getElementById('countdown');
   if (days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
-    countdownEl.textContent = "It's here! 🎉";
-  } else if (days <= 10) {
-    countdownEl.textContent = "Not long now! ⏳";
+    countdownEl.textContent = "The day is here! 🎉";
+  } else if (days <= 7) {
+    countdownEl.textContent = "Just a week left! ⏳";
   } else if (days <= 30) {
-    countdownEl.textContent = "Hang in there! 🌟";
-  } else if (days > 30) {
-    countdownEl.textContent = `${days} days left. 🌞`;
+    countdownEl.textContent = "Not long now! 🌟";
+  } else {
+    countdownEl.textContent = `${days} days left! 🕒`;
   }
 
   // Update the countdown every second
   setTimeout(countdownToNovember, 1000);
 }
 
-// Function to display the widget's content
-function displayWidget() {
-  const now = new Date();
-  displayDate(now);
-  displayClock(now);
-  setTimeout(displayWidget, 500);
-  countdownToNovember(); // Start the countdown
-}
+countdownToNovember(); // Start the countdown
 
-displayWidget();
 </script>
 
 </body>
