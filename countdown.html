@@ -28,7 +28,7 @@
       border-radius: 20px;
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
       text-align: center;
-      width: 80%;
+      width: 90%;
       max-width: 500px;
       box-sizing: border-box;
       overflow: hidden;
@@ -36,57 +36,56 @@
 
     .message {
       font-weight: 600;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: #ffffff;
-      margin-bottom: 20px;
-      letter-spacing: 0.05em;
+      margin-top: 20px;
+      letter-spacing: 0.03em;
     }
 
     .countdown {
-      margin-top: 20px;
-      font-size: 2rem;
-      font-weight: 700;
-      color: #ecf0f1;
+      margin-bottom: 16px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffffff;
     }
 
     .clock {
       font-weight: 600;
-      font-size: 3rem;
-      letter-spacing: 0.15em;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
       color: #2c3e50;
-      margin-bottom: 20px;
+      margin-bottom: 0;
     }
 
     .time {
-      min-width: 50px;
+      min-width: 40px;
       display: inline-block;
-      padding: 10px;
+      padding: 8px;
       border-radius: 6px;
       background-color: #ecf0f1;
       color: #34495e;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
       transition: background-color 0.3s ease;
-      font-size: 2rem;
+      font-size: 1.3rem;
     }
 
-    .time.am-pm {
-      min-width: 50px;
-      display: inline-block;
-      padding: 10px;
-      border-radius: 6px;
-      background-color: #ecf0f1;
-      color: #34495e;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-      transition: background-color 0.3s ease;
-      text-transform: uppercase;
-      font-size: 1.8rem;
+    .label {
+      font-size: 0.8rem;
+      color: #fff;
+      display: block;
+      margin-top: 4px;
     }
 
     .colon {
-      margin: 0 8px;
+      margin: 0 5px;
       color: #34495e;
     }
 
+    .unit {
+      display: inline-block;
+      text-align: center;
+      margin: 0 5px;
+    }
   </style>
 </head>
 <body>
@@ -94,22 +93,31 @@
 <div class="container">
   <div class="widget">
 
-    <!-- Countdown Message -->
-    <div class="message" id="message">The countdown is on! The End of Busy Season Party is in...</div>
-
-    <!-- Countdown Timer -->
+    <!-- Countdown Header -->
     <div class="countdown" id="countdown">Counting down...</div>
 
     <!-- Time Display -->
     <div class="clock">
-      <span class="time" id="days">--</span> days
-      <span class="colon">:</span>
-      <span class="time" id="hours">--</span> hours
-      <span class="colon">:</span>
-      <span class="time" id="minutes">--</span> minutes
-      <span class="colon">:</span>
-      <span class="time" id="seconds">--</span> seconds
+      <div class="unit">
+        <span class="time" id="days">--</span>
+        <span class="label">days</span>
+      </div>
+      <div class="unit">
+        <span class="time" id="hours">--</span>
+        <span class="label">hrs</span>
+      </div>
+      <div class="unit">
+        <span class="time" id="minutes">--</span>
+        <span class="label">min</span>
+      </div>
+      <div class="unit">
+        <span class="time" id="seconds">--</span>
+        <span class="label">sec</span>
+      </div>
     </div>
+
+    <!-- Motivational Message -->
+    <div class="message" id="message">The countdown is on! The End of Busy Season Party is in...</div>
 
   </div>
 </div>
@@ -119,7 +127,7 @@
 function countdownToNovember() {
   const now = new Date();
   const targetDate = new Date('November 14, 2025 00:00:00');
-  const diff = targetDate - now; // Time difference in milliseconds
+  const diff = targetDate - now;
 
   // Time calculations
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -127,31 +135,11 @@ function countdownToNovember() {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  // Update the countdown text
+  // Update time boxes
   document.getElementById('days').textContent = days;
   document.getElementById('hours').textContent = hours;
   document.getElementById('minutes').textContent = minutes;
   document.getElementById('seconds').textContent = seconds;
 
-  // Add comments based on remaining time
-  const countdownEl = document.getElementById('countdown');
-  if (days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
-    countdownEl.textContent = "The day is here! 🎉";
-  } else if (days <= 7) {
-    countdownEl.textContent = "Just a week left! ⏳";
-  } else if (days <= 30) {
-    countdownEl.textContent = "Not long now! 🌟";
-  } else {
-    countdownEl.textContent = "Hang in there! 🪂";
-  }
-
-  // Update the countdown every second
-  setTimeout(countdownToNovember, 1000);
-}
-
-countdownToNovember(); // Start the countdown
-
-</script>
-
-</body>
-</html>
+  // Update message
+  const countdownEl
