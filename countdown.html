@@ -119,7 +119,7 @@ function countdownToNovember() {
   document.getElementById('minutes').textContent = minutes;
   document.getElementById('seconds').textContent = seconds;
 
-  const msg = document.getElementById('countdownMessage');
+  <div class="title">const msg = document.getElementById('countdownMessage');
   if (diff <= 0) {
     msg.textContent = "The day is here! 🎉";
   } else if (days <= 7) {
@@ -129,7 +129,7 @@ function countdownToNovember() {
   } else {
     msg.textContent = "Hang in there! 🪂";
   }
-
+  </div>
   setTimeout(countdownToNovember, 1000);
 }
 
