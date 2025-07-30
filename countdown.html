@@ -68,12 +68,13 @@
       display: block;
     }
 
-    .message {
-      font-size: 1rem;
-      color: #ffffff;
-      margin-top: 10px;
-      font-weight: 500;
-    }
+   .message {
+  font-size: 1.3rem; /* or 1.4rem if you want it bolder */
+  color: #ffffff;
+  margin-top: 10px;
+  font-weight: 600;
+}
+    
   </style>
 </head>
 <body>
@@ -119,7 +120,7 @@ function countdownToNovember() {
   document.getElementById('minutes').textContent = minutes;
   document.getElementById('seconds').textContent = seconds;
 
-  <div class="title">const msg = document.getElementById('countdownMessage');
+  const msg = document.getElementById('countdownMessage');
   if (diff <= 0) {
     msg.textContent = "The day is here! 🎉";
   } else if (days <= 7) {
@@ -129,7 +130,7 @@ function countdownToNovember() {
   } else {
     msg.textContent = "Hang in there! 🪂";
   }
-  </div>
+ 
   setTimeout(countdownToNovember, 1000);
 }
 
