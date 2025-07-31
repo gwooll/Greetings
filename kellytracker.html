@@ -8,7 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
       
-body {
+  <style>
+    body {
   font-family: 'Inter', sans-serif;
   background: #fefefe;
   max-width: 300px;
@@ -51,6 +52,7 @@ label {
   margin: 0;
   padding: 0;
 }
+  </style>
 </head>
 <body>
   <h2>🧡 Self-Care Tracker</h2>
@@ -67,7 +69,7 @@ label {
 
     // Load saved state
     habits.forEach(habit => {
-      const key = `${habit}_${todayKey}`;
+      const key = ${habit}_${todayKey};
       const isChecked = localStorage.getItem(key) === 'true';
       document.getElementById(habit).checked = isChecked;
       document.getElementById(habit).addEventListener('change', (e) => {
