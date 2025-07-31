@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Self-Care Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fefefe;
+      padding: 20px;
+      max-width: 300px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+    .habit {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .habit input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.3);
+    }
+    .footer {
+      font-size: 0.8em;
+      text-align: center;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧡 Daily Check-In</h2>
+  <div class="habit"><input type="checkbox" id="drink" /> <label for="drink">Drank water</label></div>
+  <div class="habit"><input type="checkbox" id="stretch" /> <label for="stretch">Took a stretch break</label></div>
+  <div class="habit"><input type="checkbox" id="eyes" /> <label for="eyes">Rested your eyes</label></div>
+  <div class="habit"><input type="checkbox" id="ask" /> <label for="ask">Asked for help if needed</label></div>
+  <div class="habit"><input type="checkbox" id="breathe" /> <label for="breathe">Took 3 deep breaths</label></div>
+  <div class="footer">Resets daily at midnight AEST</div>
+
+  <script>
+    const habits = ['drink', 'stretch', 'eyes', 'ask', 'breathe'];
+    const todayKey = new Date().toLocaleDateString('en-AU', { timeZone: 'Australia/Sydney' });
+
+    // Load saved state
+    habits.forEach(habit => {
+      const key = `${habit}_${todayKey}`;
+      const isChecked = localStorage.getItem(key) === 'true';
+      document.getElementById(habit).checked = isChecked;
+      document.getElementById(habit).addEventListener('change', (e) => {
+        localStorage.setItem(key, e.target.checked);
+      });
+    });
+  </script>
+</body>
+</html>
