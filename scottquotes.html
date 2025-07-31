@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #87cefa, #ffffff);
+      background-color: #ffffff;
       color: #222;
       display: flex;
       justify-content: center;
@@ -20,22 +20,27 @@
     }
 
     .quote-box {
-      background: rgba(255, 255, 255, 0.7);
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') no-repeat center center;
+      background-size: cover;
       border-radius: 20px;
-      padding: 30px 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      max-width: 400px;
+      padding: 40px 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
+      width: 100%;
+      color: #fff;
+      backdrop-filter: blur(2px);
     }
 
     .quote {
-      font-size: 1.1em;
+      font-size: 1.2em;
       font-style: italic;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     }
 
     .author {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: 700;
-      color: #444;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
