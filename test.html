@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      position: relative;
+      width: 400px;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .theme-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.05);
+      color: #333;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      opacity: 0.2;
+      transition: opacity 0.3s, background 0.3s;
+    }
+    .theme-button:hover {
+      opacity: 1;
+      background: rgba(0,0,0,0.1);
+    }
+
+    /* Background themes */
+    .space {
+      background: radial-gradient(circle, #0d1b2a, #000);
+      background-image: repeating-radial-gradient(white 0 1px, transparent 2px 100%);
+    }
+
+    .flowers {
+      background-color: #ffeef8;
+      background-image: url('https://www.transparenttextures.com/patterns/flowers.png');
+    }
+
+    .whimsy {
+      background-color: #f0f8ff;
+      background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+    }
+
+    .funky {
+      background-color: #fff8dc;
+      background-image: url('https://www.transparenttextures.com/patterns/argyle.png');
+    }
+
+    .manga {
+      background-color: #fff;
+      background-image: url('https://www.transparenttextures.com/patterns/lined-paper.png');
+    }
+
+    .greeting {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .clock {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .quote {
+      font-size: 16px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <button class="theme-button" id="themeBtn">Theme</button>
+    <div class="greeting" id="greeting">Hello!</div>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="quote" id="quote">"Stay curious."</div>
+  </div>
+
+  <script>
+    // Greeting
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const greeting = document.getElementById('greeting');
+      if (hour < 12) greeting.textContent = "Good Morning!";
+      else if (hour < 18) greeting.textContent = "Good Afternoon!";
+      else greeting.textContent = "Good Evening!";
+    }
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent =
+        now.toLocaleTimeString();
+    }
+
+    // Quotes
+    const quotes = [
+      "Stay curious.",
+      "Creativity takes courage.",
+      "Dream big, start small.",
+      "Every day is a fresh start."
+    ];
+    function randomQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').textContent = `"${quote}"`;
+    }
+
+    // Themes
+    const themes = ["space", "flowers", "whimsy", "funky", "manga"];
+    let currentTheme = 0;
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      const container = document.getElementById('container');
+      container.classList.remove(themes[currentTheme]);
+      currentTheme = (currentTheme + 1) % themes.length;
+      container.classList.add(themes[currentTheme]);
+    });
+
+    // Init
+    updateGreeting();
+    updateClock();
+    randomQuote();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
