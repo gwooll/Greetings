@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Notion Style Greeting Widget</title>
-
-  <!-- Inter font from Google Fonts -->
+  <title>Cute Greeting Widget</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #ffffff; /* stays white */
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,42 +23,55 @@
     }
 
     .widget {
-      background-color: #fff;
+      background: #fff;
       padding: 24px 20px;
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       text-align: center;
+      position: relative;
       overflow: hidden;
       transition: background 0.5s ease;
     }
 
-    /* Fun pattern/gradient themes */
-    .theme-light {
-      background: #fff;
-      color: #37352f;
+    /* Base themes */
+    .theme-light { background: #fff; color: #37352f; }
+    .theme-dark { background: #2e2e2e; color: #eee; }
+
+    /* Fun/cute themes */
+    .theme-space {
+      background-color: #0b0c10;
+      background-image: radial-gradient(circle at 20% 20%, #fff 1px, transparent 1px),
+                        radial-gradient(circle at 80% 40%, #fff 1px, transparent 1px),
+                        radial-gradient(circle at 40% 80%, #fff 2px, transparent 2px);
+      background-size: 100px 100px;
+      color: #f2f2f2;
     }
-    .theme-dark {
-      background: #2e2e2e;
-      color: #eeeeee;
+    .theme-flowers {
+      background-color: #fff0f5;
+      background-image: radial-gradient(circle, #ffb6c1 12%, transparent 13%),
+                        radial-gradient(circle, #ffc0cb 12%, transparent 13%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      color: #333;
     }
-    .theme-ocean {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    .theme-whimsy {
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
       color: #2c3e50;
     }
-    .theme-sunset {
-      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    .theme-funky {
+      background-color: #fff;
+      background-image: linear-gradient(45deg, #ff9a9e 25%, transparent 25%), 
+                        linear-gradient(-45deg, #ffdde1 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #ff9a9e 75%), 
+                        linear-gradient(-45deg, transparent 75%, #ffdde1 75%);
+      background-size: 40px 40px;
       color: #2c3e50;
     }
-    .theme-forest {
-      background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-      color: #2c3e50;
-    }
-    .theme-grid {
-      background-color: #fafafa;
-      background-image: linear-gradient(#e0e0e0 1px, transparent 1px),
-                        linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
-      background-size: 20px 20px;
-      color: #2c3e50;
+    .theme-manga {
+      background-color: #fff;
+      background-image: radial-gradient(#000 15%, transparent 16%);
+      background-size: 12px 12px;
+      color: #000;
     }
 
     .greet {
@@ -96,18 +107,52 @@
       margin: 0 6px;
     }
 
-    /* Sleek theme selector inside widget */
-    .theme-selector {
-      margin-top: 20px;
-    }
-    .theme-selector select {
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.1);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+    /* Hidden theme button */
+    .theme-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.05);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      opacity: 0.2;
       cursor: pointer;
-      background: rgba(255,255,255,0.8);
+      transition: opacity 0.3s ease, background 0.3s ease;
+    }
+    .theme-button:hover {
+      opacity: 1;
+      background: rgba(0,0,0,0.1);
+    }
+
+    /* Theme menu (hidden until click) */
+    .theme-menu {
+      position: absolute;
+      top: 45px;
+      right: 10px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      flex-direction: column;
+      padding: 8px;
+      z-index: 100;
+    }
+    .theme-option {
+      padding: 6px 10px;
+      margin: 2px 0;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      transition: background 0.2s ease;
+    }
+    .theme-option:hover {
+      background: rgba(0,0,0,0.05);
     }
   </style>
 </head>
@@ -115,6 +160,17 @@
 
 <div class="container">
   <div class="widget theme-light" id="widget">
+    <button class="theme-button" id="themeBtn">🎨</button>
+    <div class="theme-menu" id="themeMenu">
+      <button class="theme-option" data-theme="theme-light">🌞 Light</button>
+      <button class="theme-option" data-theme="theme-dark">🌙 Dark</button>
+      <button class="theme-option" data-theme="theme-space">🌌 Space</button>
+      <button class="theme-option" data-theme="theme-flowers">🌸 Flowers</button>
+      <button class="theme-option" data-theme="theme-whimsy">✨ Whimsy</button>
+      <button class="theme-option" data-theme="theme-funky">🎉 Funky</button>
+      <button class="theme-option" data-theme="theme-manga">📚 Manga</button>
+    </div>
+
     <div class="greet" id="greet">Hello!</div>
     <div class="date" id="date">Loading date...</div>
     <div class="clock">
@@ -124,19 +180,6 @@
       <span class="colon"></span>
       <span class="time" id="ampm">AM</span>
     </div>
-
-    <!-- Theme selector inside the widget -->
-    <div class="theme-selector">
-      <label for="theme">Theme: </label>
-      <select id="theme">
-        <option value="theme-light">Light</option>
-        <option value="theme-dark">Dark</option>
-        <option value="theme-ocean">Ocean</option>
-        <option value="theme-sunset">Sunset</option>
-        <option value="theme-forest">Forest</option>
-        <option value="theme-grid">Grid Pattern</option>
-      </select>
-    </div>
   </div>
 </div>
 
@@ -144,12 +187,9 @@
 function displayGreetings(today){
   const hrs = today.getHours();
   let greet = '';
-  if (hrs < 12)
-    greet = 'Good Morning Kelly ☀️';
-  else if (hrs >= 12 && hrs <= 17)
-    greet = 'Good Afternoon Kelly 🌤️';
-  else
-    greet = 'Good Evening Kelly 🌙';
+  if (hrs < 12) greet = 'Good Morning Kelly ☀️';
+  else if (hrs < 18) greet = 'Good Afternoon Kelly 🌤️';
+  else greet = 'Good Evening Kelly 🌙';
   document.getElementById('greet').innerHTML = greet;
 }
 
@@ -178,12 +218,23 @@ function displayWidget() {
   setTimeout(displayWidget, 500);
 }
 
-document.getElementById('theme').addEventListener('change', (e) => {
-  const widget = document.getElementById('widget');
-  widget.className = 'widget ' + e.target.value;
+displayWidget();
+
+/* Theme menu logic */
+const themeBtn = document.getElementById('themeBtn');
+const themeMenu = document.getElementById('themeMenu');
+const widget = document.getElementById('widget');
+
+themeBtn.addEventListener('click', () => {
+  themeMenu.style.display = themeMenu.style.display === 'flex' ? 'none' : 'flex';
 });
 
-displayWidget();
+document.querySelectorAll('.theme-option').forEach(option => {
+  option.addEventListener('click', () => {
+    widget.className = 'widget ' + option.dataset.theme;
+    themeMenu.style.display = 'none';
+  });
+});
 </script>
 
 </body>
