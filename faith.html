@@ -1,294 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cute Greeting Widget (HTML/CSS/JS)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-<style>
-  :root{
-    --text-main:#37352f;
-    --muted:#7a7a7a;
-  }
-  /* page stays white */
-  body{
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background:#fff;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
+  <meta charset="UTF-8">
+  <title>Themed Container</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: white; /* stays plain white */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-  .container{ width:clamp(280px, 92vw, 460px); }
+    .container {
+      width: 600px;
+      height: 400px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.5s ease;
+    }
 
-  .widget{
-    position:relative;
-    background:#fff; /* default */
-    color:var(--text-main);
-    padding:24px 20px 18px;
-    border-radius:16px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    overflow:hidden;
-    transition:background .5s ease, color .3s ease;
-  }
+    /* Theme button */
+    .theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      opacity: 0.2;
+      transition: opacity 0.3s ease;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 4px 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
 
-  .greet{
-    font-weight:600;
-    font-size:2.1rem;
-    margin:0 0 10px;
-  }
-  .date{
-    font-weight:500;
-    font-size:1.05rem;
-    margin:0 0 18px;
-    color:var(--muted);
-    letter-spacing:.02em;
-  }
-  .clock{
-    font-weight:600;
-    font-size:1.7rem;
-    letter-spacing:.12em;
-  }
-  .time{
-    min-width:30px;
-    display:inline-block;
-    padding:0 6px;
-    border-radius:6px;
-    background:rgba(255,255,255,.65);
-    color:#2c3e50;
-    box-shadow:inset 0 2px 4px rgba(0,0,0,.06);
-    transition:background .3s ease,color .3s ease;
-  }
-  .colon{ margin:0 6px; }
+    /* Patterns */
+    .space {
+      background-color: #0b0c10;
+      background-image: radial-gradient(white 1px, transparent 1px),
+                        radial-gradient(white 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      color: white;
+    }
 
-  /* -- subtle theme button ------------------------------------------------ */
-  .theme-btn{
-    position:absolute;
-    top:10px; right:10px;
-    width:28px; height:28px;
-    border:none; border-radius:50%;
-    background:rgba(0,0,0,.06);
-    color:#333;
-    display:grid; place-items:center;
-    font-size:15px;
-    cursor:pointer;
-    opacity:.2;
-    transition:opacity .25s ease, background .25s ease, transform .2s ease;
-    backdrop-filter:blur(2px);
-  }
-  .widget:hover .theme-btn{ opacity:.75; }
-  .theme-btn:hover{ background:rgba(0,0,0,.12); transform:scale(1.04); }
+    .flowers {
+      background-color: #fdf6f9;
+      background-image: radial-gradient(circle at 10px 10px, pink 4px, transparent 0),
+                        radial-gradient(circle at 30px 30px, lightblue 6px, transparent 0),
+                        radial-gradient(circle at 50px 50px, lavender 5px, transparent 0);
+      background-size: 60px 60px;
+    }
 
-  /* -- floating theme menu ------------------------------------------------ */
-  .theme-menu{
-    position:absolute;
-    top:44px; right:10px;
-    display:none; /* toggled via JS */
-    gap:2px;
-    padding:8px;
-    width:180px;
-    background:rgba(255,255,255,.96);
-    border-radius:12px;
-    box-shadow:0 10px 22px rgba(0,0,0,.12);
-    z-index:10;
-  }
-  .theme-menu.open{ display:grid; }
-  .theme-option{
-    border:none; border-radius:8px;
-    text-align:left; padding:8px 10px;
-    font-size:.9rem; cursor:pointer;
-    background:transparent;
-    display:flex; align-items:center; gap:8px;
-  }
-  .swatch{
-    width:18px; height:18px; border-radius:4px;
-    background:#ddd; flex:0 0 18px; border:1px solid rgba(0,0,0,.1);
-  }
-  .theme-option:hover{ background:rgba(0,0,0,.05); }
+    .whimsy {
+      background-color: #fefaf2;
+      background-image: radial-gradient(circle at 20px 20px, #ffb347 8px, transparent 0),
+                        radial-gradient(circle at 60px 40px, #77dd77 12px, transparent 0),
+                        radial-gradient(circle at 40px 70px, #779ecb 10px, transparent 0);
+      background-size: 80px 80px;
+    }
 
-  /* -- themes (only affect .widget background) ---------------------------- */
-  /* Light / Dark (simple) */
-  .t-light{ background:#fff; color:#37352f; }
-  .t-dark{
-    background:#2a2a2a;
-    color:#efefef;
-  }
-  .t-dark .time{ background:rgba(255,255,255,.14); color:#f7f7f7; }
+    .funky {
+      background-color: #fff;
+      background-image: repeating-linear-gradient(45deg, #ff69b4, #ff69b4 10px, transparent 10px, transparent 20px),
+                        repeating-linear-gradient(-45deg, #00ced1, #00ced1 10px, transparent 10px, transparent 20px);
+      background-size: 40px 40px;
+    }
 
-  /* Space: starfield + a few soft planets (all subtle) */
-  .t-space{
-    color:#eef3ff;
-    background:
-      radial-gradient(circle at 18% 22%, rgba(120,160,255,.18) 0 60px, transparent 61px),
-      radial-gradient(circle at 78% 68%, rgba(255,210,140,.15) 0 50px, transparent 51px),
-      radial-gradient(circle at 58% 28%, rgba(180,255,230,.14) 0 40px, transparent 41px),
-      radial-gradient(#fff 1px, transparent 1px) 0 0/110px 110px,
-      radial-gradient(#fff 1.2px, transparent 1.2px) 40px 70px/120px 120px,
-      radial-gradient(#fff 0.8px, transparent 0.8px) 80px 30px/100px 100px,
-      #0b0c18;
-  }
-  .t-space .time{ background:rgba(255,255,255,.2); color:#fff; }
-
-  /* Flowers: tiny flower doodles via inline SVG pattern (subtle) */
-  .t-flowers{
-    background:
-      url("data:image/svg+xml;utf8,\
-      <svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'>\
-        <g fill='none' stroke='%23f3a5c7' stroke-width='1.2' stroke-linecap='round' opacity='0.6'>\
-          <path d='M30 16c3 0 6 3 6 6s-3 6-6 6-6-3-6-6 3-6 6-6z'/>\
-          <path d='M30 10v8M30 28v8M22 22h8M30 22h8'/>\
-        </g>\
-        <g fill='none' stroke='%23a7d7a9' stroke-width='1' opacity='0.5'>\
-          <circle cx='8' cy='8' r='3'/>\
-          <circle cx='52' cy='46' r='2.5'/>\
-        </g>\
-      </svg>") 0 0/120px 120px,
-      linear-gradient(180deg, #fff 0%, #fff6fb 100%);
-    color:#2c3e50;
-  }
-
-  /* Whimsy: soft squiggles via SVG + pastel wash */
-  .t-whimsy{
-    background:
-      url("data:image/svg+xml;utf8,\
-      <svg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'>\
-        <path d='M5 30c15-18 35 18 50 0s35 18 50 0' fill='none' stroke='%2399c7ff' stroke-width='2' opacity='0.35'/>\
-        <path d='M0 12c10 8 22-8 32 0s22-8 32 0' fill='none' stroke='%23ffd29b' stroke-width='1.6' opacity='0.35'/>\
-      </svg>") 0 0/160px 80px,
-      linear-gradient(135deg, #f8fbff 0%, #fff7ef 100%);
-    color:#2c3e50;
-  }
-
-  /* Funky: retro geometric using conic/repeating gradients (muted) */
-  .t-funky{
-    background:
-      repeating-conic-gradient(from 45deg, rgba(255,154,158,.18) 0 25deg, rgba(255,221,225,.18) 25deg 50deg),
-      linear-gradient(180deg,#ffffff 0,#fff 100%);
-    color:#2c3e50;
-  }
-
-  /* Manga: halftone dots (subtle) + angled speed lines layer */
-  .t-manga{
-    background:
-      /* speed lines */
-      repeating-linear-gradient(110deg, rgba(0,0,0,.06) 0 1px, transparent 1px 12px),
-      /* halftone */
-      radial-gradient(rgba(0,0,0,.12) 1px, transparent 1.4px) 0 0/10px 10px,
-      #ffffff;
-    color:#111;
-  }
-
-  /* tiny swatches matching themes */
-  .swatch.light{ background:#fff; }
-  .swatch.dark{ background:#2a2a2a; }
-  .swatch.space{ background:#0b0c18; }
-  .swatch.flowers{ background:linear-gradient(180deg,#fff,#ffeaf6); }
-  .swatch.whimsy{ background:linear-gradient(135deg,#f8fbff,#fff7ef); }
-  .swatch.funky{ background:linear-gradient(135deg,#ffdde1,#ff9a9e); }
-  .swatch.manga{
-    background:
-      radial-gradient(rgba(0,0,0,.3) 35%, transparent 36%) 0 0/8px 8px,
-      #fff;
-  }
-</style>
+    .manga {
+      background-color: #fff;
+      background-image: radial-gradient(black 1px, transparent 1px);
+      background-size: 10px 10px;
+      background-position: 0 0, 5px 5px;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="widget t-light" id="widget">
-    <!-- subtle theme button -->
-    <button class="theme-btn" id="themeBtn" aria-haspopup="true" aria-expanded="false" title="Change theme">🎨</button>
-
-    <!-- floating menu (inside widget) -->
-    <div class="theme-menu" id="themeMenu" role="menu" aria-label="Theme menu">
-      <button class="theme-option" data-theme="t-light"><span class="swatch light"></span> 🌞 Light</button>
-      <button class="theme-option" data-theme="t-dark"><span class="swatch dark"></span> 🌙 Dark</button>
-      <button class="theme-option" data-theme="t-space"><span class="swatch space"></span> 🌌 Space</button>
-      <button class="theme-option" data-theme="t-flowers"><span class="swatch flowers"></span> 🌸 Flowers</button>
-      <button class="theme-option" data-theme="t-whimsy"><span class="swatch whimsy"></span> ✨ Whimsy</button>
-      <button class="theme-option" data-theme="t-funky"><span class="swatch funky"></span> 🎉 Funky</button>
-      <button class="theme-option" data-theme="t-manga"><span class="swatch manga"></span> 📚 Manga</button>
-    </div>
-
-    <div class="greet" id="greet">Hello!</div>
-    <div class="date" id="date">Loading date...</div>
-    <div class="clock">
-      <span class="time" id="hour">--</span>
-      <span class="colon">:</span>
-      <span class="time" id="min">--</span>
-      <span class="colon"></span>
-      <span class="time am-pm" id="ampm">AM</span>
-    </div>
+  <div class="container space" id="themedContainer">
+    <select class="theme-toggle" id="themeSelect">
+      <option value="space">Space</option>
+      <option value="flowers">Flowers</option>
+      <option value="whimsy">Whimsy</option>
+      <option value="funky">Funky</option>
+      <option value="manga">Manga</option>
+    </select>
+    <h2>Pick a theme ✨</h2>
   </div>
-</div>
 
-<script>
-  /* greetings + clock (unchanged) */
-  function displayGreetings(today){
-    const hrs = today.getHours();
-    let greet = '';
-    if (hrs < 12) greet = 'Good Morning Kelly ☀️';
-    else if (hrs < 18) greet = 'Good Afternoon Kelly 🌤️';
-    else greet = 'Good Evening Kelly 🌙';
-    document.getElementById('greet').textContent = greet;
-  }
-  function displayDate(today){
-    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    document.getElementById('date').textContent =
-      `${days[today.getDay()]}, ${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
-  }
-  function displayClock(today){
-    const h24=today.getHours();
-    const h12=(h24===0)?12:(h24>12?h24-12:h24);
-    const m=String(today.getMinutes()).padStart(2,'0');
-    const ap=h24>=12?'PM':'AM';
-    document.getElementById('hour').textContent=h12;
-    document.getElementById('min').textContent=m;
-    document.getElementById('ampm').textContent=ap;
-  }
-  (function tick(){
-    const now=new Date();
-    displayGreetings(now); displayDate(now); displayClock(now);
-    setTimeout(tick,500);
-  })();
+  <script>
+    const themeSelect = document.getElementById('themeSelect');
+    const container = document.getElementById('themedContainer');
 
-  /* theme UI logic */
-  const widget = document.getElementById('widget');
-  const btn = document.getElementById('themeBtn');
-  const menu = document.getElementById('themeMenu');
-
-  btn.addEventListener('click', () => {
-    const open = menu.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-
-  // close on outside click
-  document.addEventListener('click', (e)=>{
-    if (!widget.contains(e.target)) {
-      menu.classList.remove('open');
-      btn.setAttribute('aria-expanded','false');
-    }
-  });
-
-  // apply theme
-  document.querySelectorAll('.theme-option').forEach(opt=>{
-    opt.addEventListener('click', ()=>{
-      widget.className = 'widget ' + opt.dataset.theme;
-      menu.classList.remove('open');
-      btn.setAttribute('aria-expanded','false');
-      // optional: remember choice
-      try { localStorage.setItem('greetTheme', opt.dataset.theme); } catch(e){}
+    themeSelect.addEventListener('change', (e) => {
+      container.className = 'container ' + e.target.value;
     });
-  });
-
-  // restore saved theme
-  try {
-    const saved = localStorage.getItem('greetTheme');
-    if (saved) widget.className = 'widget ' + saved;
-  } catch(e){}
-</script>
+  </script>
 </body>
 </html>
