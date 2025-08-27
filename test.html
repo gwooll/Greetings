@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Widget</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notion Style Greeting Widget</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: white;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff; /* outside stays white */
+      color: #37352f;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,24 +20,72 @@
 
     .container {
       position: relative;
-      width: 400px;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      background: #fff;
-      text-align: center;
-      overflow: hidden;
+      width: 90%;
+      max-width: 500px;
     }
 
+    .widget {
+      background-color: #fff; /* default widget background */
+      padding: 22px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      text-align: left;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: background 0.5s ease, background-image 0.5s ease;
+    }
+
+    .greet {
+      font-weight: 600;
+      font-size: 2.6rem;
+      margin-bottom: 16px;
+      color: #f39c12;
+    }
+
+    .date {
+      font-weight: 500;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #999999;
+      letter-spacing: 0.05em;
+    }
+
+    .clock {
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      color: #2c3e50;
+    }
+
+    .time {
+      min-width: 30px;
+      display: inline-block;
+      padding: 0 4px;
+      border-radius: 6px;
+      background-color: #ecf0f1;
+      color: #34495e;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      transition: background-color 0.3s ease;
+    }
+
+    .time.am-pm {
+      text-transform: uppercase;
+    }
+
+    .colon {
+      margin: 0 8px;
+      color: #34495e;
+    }
+
+    /* Theme button */
     .theme-button {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       background: rgba(0,0,0,0.05);
-      color: #333;
       border: none;
       padding: 6px 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 12px;
       opacity: 0.2;
@@ -45,99 +96,143 @@
       background: rgba(0,0,0,0.1);
     }
 
-    /* Background themes */
+    /* Background patterns */
     .space {
-      background: radial-gradient(circle, #0d1b2a, #000);
-      background-image: repeating-radial-gradient(white 0 1px, transparent 2px 100%);
+      background-color: #0b0c10;
+      background-image: radial-gradient(white 1px, transparent 1px),
+                        radial-gradient(white 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      color: white;
     }
 
     .flowers {
-      background-color: #ffeef8;
-      background-image: url('https://www.transparenttextures.com/patterns/flowers.png');
+      background-color: #fdf6f9;
+      background-image: radial-gradient(circle at 10px 10px, pink 4px, transparent 0),
+                        radial-gradient(circle at 30px 30px, lightblue 6px, transparent 0),
+                        radial-gradient(circle at 50px 50px, lavender 5px, transparent 0);
+      background-size: 60px 60px;
     }
 
     .whimsy {
-      background-color: #f0f8ff;
-      background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-color: #fefaf2;
+      background-image: radial-gradient(circle at 20px 20px, #ffb347 8px, transparent 0),
+                        radial-gradient(circle at 60px 40px, #77dd77 12px, transparent 0),
+                        radial-gradient(circle at 40px 70px, #779ecb 10px, transparent 0);
+      background-size: 80px 80px;
     }
 
     .funky {
-      background-color: #fff8dc;
-      background-image: url('https://www.transparenttextures.com/patterns/argyle.png');
+      background-color: #fff;
+      background-image: repeating-linear-gradient(45deg, #ff69b4, #ff69b4 10px, transparent 10px, transparent 20px),
+                        repeating-linear-gradient(-45deg, #00ced1, #00ced1 10px, transparent 10px, transparent 20px);
+      background-size: 40px 40px;
     }
 
     .manga {
       background-color: #fff;
-      background-image: url('https://www.transparenttextures.com/patterns/lined-paper.png');
-    }
-
-    .greeting {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-    .clock {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .quote {
-      font-size: 16px;
-      font-style: italic;
+      background-image: radial-gradient(black 1px, transparent 1px);
+      background-size: 10px 10px;
+      background-position: 0 0, 5px 5px;
     }
   </style>
 </head>
 <body>
-  <div class="container" id="container">
+
+<div class="container">
+  <div class="widget" id="widget">
+
     <button class="theme-button" id="themeBtn">Theme</button>
-    <div class="greeting" id="greeting">Hello!</div>
-    <div class="clock" id="clock">00:00:00</div>
-    <div class="quote" id="quote">"Stay curious."</div>
+
+    <div class="greet" id="greet">Hello!</div>
+    <div class="date" id="date">Loading date...</div>
+    <div class="clock">
+      <span class="time" id="hour">--</span>
+      <span class="colon">:</span>
+      <span class="time" id="min">--</span>     
+      <span class="colon"></span>
+      <span class="time am-pm" id="ampm">AM</span>
+    </div>
+
   </div>
+</div>
 
-  <script>
-    // Greeting
-    function updateGreeting() {
-      const hour = new Date().getHours();
-      const greeting = document.getElementById('greeting');
-      if (hour < 12) greeting.textContent = "Good Morning!";
-      else if (hour < 18) greeting.textContent = "Good Afternoon!";
-      else greeting.textContent = "Good Evening!";
-    }
+<script>
+  // Theme button logic
+  const themes = ["", "space", "flowers", "whimsy", "funky", "manga"];
+  let currentTheme = 0;
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const widget = document.getElementById('widget');
+    widget.classList.remove(themes[currentTheme]);
+    currentTheme = (currentTheme + 1) % themes.length;
+    if (themes[currentTheme] !== "") widget.classList.add(themes[currentTheme]);
+  });
 
-    // Clock
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').textContent =
-        now.toLocaleTimeString();
-    }
+  // Greeting
+  function displayGreetings(today){
+    const hrs = today.getHours();
+    let greet = '';
+    const greetEl = document.getElementById('greet');
+    greetEl.classList.remove('morning', 'afternoon', 'evening');
 
-    // Quotes
-    const quotes = [
-      "Stay curious.",
-      "Creativity takes courage.",
-      "Dream big, start small.",
-      "Every day is a fresh start."
+    if (hrs < 12)
+      greet = 'Good Morning Kelly ☀️';
+    else if (hrs >= 12 && hrs <= 17)
+      greet = 'Good Afternoon Kelly 🌤️';
+    else if (hrs >= 17 && hrs <= 24)
+      greet = 'Good Evening Kelly 🌙';
+    document.getElementById('greet').innerHTML = greet;
+  }
+
+  // Date
+  function displayDate(today) {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
     ];
-    function randomQuote() {
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote').textContent = `"${quote}"`;
-    }
 
-    // Themes
-    const themes = ["space", "flowers", "whimsy", "funky", "manga"];
-    let currentTheme = 0;
-    document.getElementById('themeBtn').addEventListener('click', () => {
-      const container = document.getElementById('container');
-      container.classList.remove(themes[currentTheme]);
-      currentTheme = (currentTheme + 1) % themes.length;
-      container.classList.add(themes[currentTheme]);
-    });
+    const dayName = days[today.getDay()];
+    const monthName = monthNames[today.getMonth()];
+    const date = today.getDate();
+    const year = today.getFullYear();
 
-    // Init
-    updateGreeting();
-    updateClock();
-    randomQuote();
-    setInterval(updateClock, 1000);
-  </script>
+    document.getElementById('date').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
+  }
+
+  // Clock
+  function displayClock(today) {
+    const hour24 = today.getHours();
+    const hour12 = twelveHour(hour24);
+    const minutes = padZeros(today.getMinutes());
+    
+    const ampm = hour24 >= 12 ? 'PM' : 'AM';
+
+    document.getElementById('hour').textContent = hour12;
+    document.getElementById('min').textContent = minutes;
+    
+    document.getElementById('ampm').textContent = ampm;
+  }
+
+  function twelveHour(hour) {
+    if (hour === 0) return 12;
+    else if (hour > 12) return hour - 12;
+    else return hour;
+  }
+
+  function padZeros(num) {
+    return num < 10 ? '0' + num : num;
+  }
+
+  function displayWidget() {
+    const now = new Date();
+    displayGreetings(now);
+    displayDate(now);
+    displayClock(now);
+    setTimeout(displayWidget, 500);
+  }
+
+  displayWidget();
+</script>
+
 </body>
 </html>
