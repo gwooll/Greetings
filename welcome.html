@@ -1,50 +1,51 @@
 <div style="
   position: relative;
   font-family: 'Poppins', sans-serif;
-  font-size: 52px;
-  font-weight: 900;
+  font-size: 48px;
+  font-weight: 700;
   text-align: center;
   color: white;
-  padding: 50px;
-  border-radius: 20px;
+  padding: 40px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #ff8a8a, #ffd27f, #9cff9c, #7fcaff, #d09cff);
+  background-size: cover;
   overflow: hidden;
-  text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 30px #0ff;
-  background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
-  background-size: 1400% 1400%;
-  animation: rainbow 12s ease infinite;
 ">
   ✨ Welcome Prashadi! ✨
-
-  <!-- Sparkle overlay -->
   <div class="sparkles"></div>
 </div>
 
 <style>
-@keyframes rainbow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Gentle text glow */
+div {
+  text-shadow: 0 0 8px rgba(255,255,255,0.8);
+  animation: glow 4s ease-in-out infinite alternate;
 }
 
-/* Sparkles layer */
+@keyframes glow {
+  from { text-shadow: 0 0 6px rgba(255,255,255,0.6); }
+  to   { text-shadow: 0 0 12px rgba(255,255,255,1); }
+}
+
+/* Subtle sparkles */
 .sparkles::before, .sparkles::after {
-  content: "✨✨✨✨✨✨✨✨";
+  content: "✦ ✧ ✦";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  font-size: 32px;
-  text-align: center;
-  animation: twinkle 2s infinite;
-  opacity: 0.7;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  color: rgba(255,255,255,0.7);
+  animation: twinkle 6s infinite;
 }
 .sparkles::after {
-  animation-delay: 1s;
+  top: auto;
+  bottom: 10%;
+  animation-delay: 3s;
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.1; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
 }
 </style>
